@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { PORTFOLIO_INFO } from "@/data/portfolioData";
 import { useTheme } from "@/context/ThemeContext";
 import { Menu, X, Smartphone, Globe, Send, Sun, Moon } from "lucide-react";
@@ -37,12 +38,15 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand Logo */}
         <a href="#hero" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 p-[2px] transition-transform duration-300 group-hover:scale-105 shadow-sm">
-            <div className="w-full h-full bg-white dark:bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <span className="font-extrabold text-sm tracking-wider gradient-text">
-                {PORTFOLIO_INFO.initials}
-              </span>
-            </div>
+          <div className="relative h-10 w-auto flex items-center shrink-0 transition-transform duration-300 group-hover:scale-105">
+            <Image
+              src="/logo.png"
+              alt="Logo Dev Loop"
+              width={115}
+              height={40}
+              className="h-10 w-auto rounded-lg object-contain"
+              priority
+            />
           </div>
           <div>
             <div className="font-bold text-slate-900 dark:text-white text-base tracking-tight flex items-center gap-1.5">

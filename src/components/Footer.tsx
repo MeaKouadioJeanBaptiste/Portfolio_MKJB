@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { PORTFOLIO_INFO } from "@/data/portfolioData";
 import { ArrowUp, Mail, Smartphone, Globe } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
@@ -16,8 +17,14 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-sm">
-                {PORTFOLIO_INFO.initials}
+              <div className="relative h-10 w-auto flex items-center shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="Logo Dev Loop"
+                  width={115}
+                  height={40}
+                  className="h-10 w-auto rounded-lg object-contain"
+                />
               </div>
               <div>
                 <span className="font-bold text-slate-900 dark:text-white block text-sm">{PORTFOLIO_INFO.name}</span>
