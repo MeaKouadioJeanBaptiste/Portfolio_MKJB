@@ -63,12 +63,12 @@ export const PORTFOLIO_INFO: PortfolioInfo = {
   tagline:
     "Je transforme vos idées en applications Web ultra-rapides et applications Mobiles fluides, scalables et centrées sur l'utilisateur.",
   location: "Abidjan, Côte d'Ivoire & En Remote International",
-  email: "contact.jeanbaptistemea@gmail.com",
-  phone: "+225 07 00 00 00 00",
+  email: "meajeanbaptiste15@gmail.com",
+  phone: "+225 07 78 31 29 70",
   availability: "Disponible pour nouveaux projets & missions freelance / CDI",
   github: "https://github.com/MeaKouadioJeanBaptiste",
   linkedin: "https://www.linkedin.com/in/jean-baptiste-mea-a2a098224",
-  whatsapp: "https://wa.me/2250700000000",
+  whatsapp: "https://wa.me/2250778312970",
   bio: `Passionné par l'écosystème numérique et les architectures modernes, je conçois des solutions logicielles end-to-end. D'un côté, le développement Web haute performance avec Next.js, React et TypeScript ; de l'autre, des applications Mobiles natives et cross-platform ergonomiques avec React Native et Flutter. Mon objectif : allier rigueur d'ingénierie logicielle et expérience utilisateur exceptionnelle.`,
 };
 

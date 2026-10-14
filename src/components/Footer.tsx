@@ -1,13 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { PORTFOLIO_INFO } from "@/data/portfolioData";
-import { ArrowUp, Mail, Smartphone, Globe } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
+import { ArrowUp, Mail, Smartphone, Globe, CheckCircle2 } from "lucide-react";
+import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
 
 export default function Footer() {
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(PORTFOLIO_INFO.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+
+    // Détection mobile vs desktop
+    const isMobile = typeof navigator !== "undefined" && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = `mailto:${PORTFOLIO_INFO.email}`;
+    } else {
+      // Ouvre directement Gmail avec destinataire pré-rempli (fonctionne sans logiciel desktop installé)
+      window.open(
+        `https://mail.google.com/mail/?view=cm&fs=1&to=${PORTFOLIO_INFO.email}&su=${encodeURIComponent("Contact depuis votre Portfolio - Méa Kouadio Jean-Baptiste")}`,
+        "_blank"
+      );
+    }
   };
 
   return (
@@ -35,7 +57,7 @@ export default function Footer() {
               Création d&apos;applications web modernes, fluides et sécurisées avec Next.js et développement mobile natif / cross-platform (iOS & Android).
             </p>
             <div className="flex items-center gap-3 pt-1">
-              <a
+              {/* <a
                 href={PORTFOLIO_INFO.github}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -43,7 +65,7 @@ export default function Footer() {
                 aria-label="GitHub"
               >
                 <GithubIcon className="w-4 h-4" />
-              </a>
+              </a> */}
               <a
                 href={PORTFOLIO_INFO.linkedin}
                 target="_blank"
@@ -54,12 +76,33 @@ export default function Footer() {
                 <LinkedinIcon className="w-4 h-4" />
               </a>
               <a
-                href={`mailto:${PORTFOLIO_INFO.email}`}
-                className="w-9 h-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
-                aria-label="Email"
+                href={PORTFOLIO_INFO.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
+                aria-label="WhatsApp"
               >
-                <Mail className="w-4 h-4" />
+                <WhatsappIcon className="w-4 h-4" />
               </a>
+              <div className="relative">
+                <button
+                  onClick={handleEmailClick}
+                  className="w-9 h-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
+                  title="Écrire à meajeanbaptiste15@gmail.com (cliquez pour ouvrir Gmail ou copier)"
+                  aria-label="Email"
+                >
+                  {copiedEmail ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 animate-scale-in" />
+                  ) : (
+                    <Mail className="w-4 h-4" />
+                  )}
+                </button>
+                {copiedEmail && (
+                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-md whitespace-nowrap z-20">
+                    Email copié !
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 

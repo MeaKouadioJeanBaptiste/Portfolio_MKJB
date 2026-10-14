@@ -32,7 +32,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "glass-panel bg-white/90 dark:bg-slate-950/85 border-b border-slate-200/80 dark:border-white/10 py-3 shadow-md dark:shadow-black/40"
-          : "bg-transparent py-5"
+          : "bg-slate-950/40 backdrop-blur-md border-b border-white/10 py-4 shadow-sm"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -49,16 +49,20 @@ export default function Navbar() {
             />
           </div>
           <div>
-            <div className="font-bold text-slate-900 dark:text-white text-base tracking-tight flex items-center gap-1.5">
+            <div className={`font-bold text-base tracking-tight flex items-center gap-1.5 transition-colors ${
+              isScrolled ? "text-slate-900 dark:text-white" : "text-white"
+            }`}>
               <span>{PORTFOLIO_INFO.name}</span>
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-              <span className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-medium">
+            <div className={`flex items-center gap-2 text-xs transition-colors ${
+              isScrolled ? "text-slate-500 dark:text-slate-400" : "text-slate-300"
+            }`}>
+              <span className="flex items-center gap-1 text-cyan-400 font-medium">
                 <Globe className="w-3 h-3" /> Web
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-medium">
+              <span className="flex items-center gap-1 text-indigo-400 font-medium">
                 <Smartphone className="w-3 h-3" /> Mobile
               </span>
             </div>
@@ -66,12 +70,20 @@ export default function Navbar() {
         </a>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-full px-4 py-1.5 shadow-sm backdrop-blur-md">
+        <nav className={`hidden md:flex items-center gap-1 rounded-full px-4 py-1.5 shadow-sm backdrop-blur-md border transition-all ${
+          isScrolled
+            ? "bg-white/80 dark:bg-slate-900/60 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300"
+            : "bg-slate-900/70 border-white/15 text-slate-200"
+        }`}>
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-3 py-1.5 rounded-full transition-colors hover:bg-slate-100 dark:hover:bg-white/5"
+              className={`text-sm font-medium px-3 py-1.5 rounded-full transition-colors ${
+                isScrolled
+                  ? "hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5"
+                  : "hover:text-white hover:bg-white/10"
+              }`}
             >
               {link.name}
             </a>

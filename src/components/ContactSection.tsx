@@ -14,6 +14,7 @@ import {
   Smartphone,
   Globe,
 } from "lucide-react";
+import { WhatsappIcon } from "@/components/icons/SocialIcons";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -34,14 +35,45 @@ export default function ContactSection() {
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/meajeanbaptiste15@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          Nom: formData.name,
+          Email: formData.email,
+          "Type de Projet": formData.projectType,
+          Message: formData.message,
+          _subject: `🚀 Nouveau projet Portfolio de ${formData.name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        throw new Error("Erreur de transmission");
+      }
+    } catch (err) {
+      console.warn("Échec FormSubmit, bascule vers mailto:", err);
+      // Fallback direct vers client mail pour ne jamais perdre le message
+      window.location.href = `mailto:${PORTFOLIO_INFO.email}?subject=${encodeURIComponent(
+        `Nouveau projet Portfolio de ${formData.name}`
+      )}&body=${encodeURIComponent(
+        `Nom: ${formData.name}\nEmail: ${formData.email}\nType de projet: ${formData.projectType}\n\nMessage:\n${formData.message}`
+      )}`;
       setSubmitted(true);
-    }, 1200);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -105,13 +137,16 @@ export default function ContactSection() {
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200/80 dark:border-white/5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                    <MessageSquare className="w-5 h-5" />
+                    <WhatsappIcon className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 block">WhatsApp</span>
-                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">
-                      Disponible 7j/7 pour opportunités
-                    </span>
+                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 block">WhatsApp & Téléphone</span>
+                    <a
+                      href={`tel:${PORTFOLIO_INFO.phone.replace(/\s+/g, '')}`}
+                      className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors block"
+                    >
+                      {PORTFOLIO_INFO.phone}
+                    </a>
                   </div>
                 </div>
 
@@ -119,9 +154,9 @@ export default function ContactSection() {
                   href={PORTFOLIO_INFO.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3.5 py-2 rounded-xl bg-emerald-600/15 hover:bg-emerald-600/30 text-emerald-800 dark:text-emerald-300 text-xs font-extrabold transition-colors flex items-center gap-1 border border-emerald-500/30"
+                  className="px-3.5 py-2 rounded-xl bg-emerald-600/15 hover:bg-emerald-600/30 text-emerald-800 dark:text-emerald-300 text-xs font-extrabold transition-colors flex items-center gap-1.5 border border-emerald-500/30 shrink-0"
                 >
-                  <span>Chat</span>
+                  <span>Chatter</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -166,15 +201,39 @@ export default function ContactSection() {
           <div className="lg:col-span-7">
             <div className="bg-white dark:bg-[#131b2e] p-6 sm:p-10 rounded-3xl border-2 border-slate-200/90 dark:border-white/15 shadow-xl">
               {submitted ? (
-                <div className="py-12 text-center space-y-4">
+                <div className="py-10 text-center space-y-5">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">Message envoyé avec succès !</h3>
-                  <p className="text-slate-700 dark:text-slate-200 text-sm max-w-md mx-auto font-medium">
-                    Merci {formData.name || "beaucoup"} ! J&apos;ai bien reçu votre demande et je vous répondrai à l&apos;adresse{" "}
-                    <span className="text-indigo-700 dark:text-cyan-400 font-extrabold">{formData.email}</span> dans les plus brefs délais.
-                  </p>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">Message envoyé avec succès !</h3>
+                    <p className="text-slate-700 dark:text-slate-200 text-sm max-w-md mx-auto font-medium leading-relaxed">
+                      Merci <strong className="text-slate-900 dark:text-white">{formData.name}</strong> ! Votre demande de projet a été transmise directement à Méa Kouadio Jean-Baptiste (<span className="text-indigo-600 dark:text-cyan-400 font-extrabold">{PORTFOLIO_INFO.email}</span>).
+                    </p>
+                  </div>
+
+                  {/* Bouton direct WhatsApp en complément pour échange instantané */}
+                  <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto text-left flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+                    <div className="flex items-center gap-2.5">
+                      <WhatsappIcon className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <div className="text-xs">
+                        <span className="font-bold text-slate-900 dark:text-white block">Échange encore plus rapide ?</span>
+                        <span className="text-slate-600 dark:text-slate-400">Transférez aussi ce projet sur son WhatsApp</span>
+                      </div>
+                    </div>
+                    <a
+                      href={`https://wa.me/2250778312970?text=${encodeURIComponent(
+                        `Bonjour Méa, je viens de vous envoyer une demande depuis votre portfolio :\n- Nom : ${formData.name}\n- Email : ${formData.email}\n- Type : ${formData.projectType}\n- Message : ${formData.message}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 shrink-0"
+                    >
+                      <span>WhatsApp</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+
                   <button
                     onClick={() => {
                       setSubmitted(false);
@@ -186,7 +245,7 @@ export default function ContactSection() {
                         message: "",
                       });
                     }}
-                    className="mt-4 px-6 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-300 dark:border-white/10"
+                    className="mt-3 px-6 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-300 dark:border-white/10"
                   >
                     Envoyer un autre message
                   </button>
